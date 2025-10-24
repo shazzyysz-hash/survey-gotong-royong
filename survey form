@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borang Soal Selidik - Gotong-Royong</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .introduction {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 30px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .section {
+            margin-bottom: 35px;
+        }
+        .section-title {
+            background-color: #34495e;
+            color: white;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .radio-group label, .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+        .radio-group input, .checkbox-group input {
+            margin-right: 10px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+        .likert-scale {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+        .likert-scale label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0;
+            font-weight: normal;
+        }
+        .likert-labels {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+        }
+        .likert-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        .likert-options input {
+            width: 30px;
+            height: 30px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            min-height: 80px;
+            resize: vertical;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .btn-submit {
+            background-color: #27ae60;
+            color: white;
+        }
+        .btn-submit:hover {
+            background-color: #229954;
+        }
+        .btn-submit:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .btn-reset {
+            background-color: #95a5a6;
+            color: white;
+        }
+        .btn-reset:hover {
+            background-color: #7f8c8d;
+        }
+        .note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .required {
+            color: #e74c3c;
+        }
+        .status-message {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        .status-message.loading {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="header">
+            <h1>Borang Soal Selidik Kajian Lapangan</h1>
+            <p><strong>Tajuk:</strong> Tahap Kesedaran Pelajar Kolej terhadap Amalan Gotong-Royong di Tanah Perkuburan</p>
+        </div>
+
+        <div class="introduction">
+            <strong>Pengenalan:</strong> Kajian ini dijalankan untuk menilai tahap kesedaran dan pandangan pelajar kolej terhadap amalan gotong-royong di tanah perkuburan. Tujuan utama kajian ini adalah untuk memahami sejauh mana pelajar mengambil berat tentang tanggungjawab sosial dan nilai kerjasama dalam menjaga tempat awam, khususnya tanah perkuburan sebagai tempat yang suci dan bersejarah. Semua maklumat yang diberikan akan dirahsiakan dan digunakan untuk tujuan akademik sahaja.
+            <p style="margin-top: 15px;"><strong>Arahan:</strong> Sila jawab semua soalan dengan ikhlas dan jujur.</p>
+        </div>
+
+        <form id="surveyForm">
+            <!-- Bahagian A: Maklumat Diri -->
+            <div class="section">
+                <div class="section-title">Bahagian A: Maklumat Diri</div>
+
+                <div class="form-group">
+                    <label>1. Umur <span class="required">*</span></label>
+                    <input type="number" name="age" min="15" max="100" required>
+                    <span class="note">Tahun</span>
+                </div>
+
+                <div class="form-group">
+                    <label>2. Jantina <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="gender" value="Lelaki" required> Lelaki</label>
+                        <label><input type="radio" name="gender" value="Perempuan"> Perempuan</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>3. Kaum <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="race" value="Melayu" required> Melayu</label>
+                        <label><input type="radio" name="race" value="Cina"> Cina</label>
+                        <label><input type="radio" name="race" value="India"> India</label>
+                        <label><input type="radio" name="race" value="Lain-lain"> Lain-lain</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>4. Program Pengajian <span class="required">*</span></label>
+                    <input type="text" name="program" required>
+                </div>
+
+                <div class="form-group">
+                    <label>5. Semester <span class="required">*</span></label>
+                    <input type="number" name="semester" min="1" max="8" required>
+                </div>
+
+                <div class="form-group">
+                    <label>6. Adakah anda tinggal berhampiran tanah perkuburan? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="nearCemetery" value="Ya" required> Ya</label>
+                        <label><input type="radio" name="nearCemetery" value="Tidak"> Tidak</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bahagian B: Pengetahuan -->
+            <div class="section">
+                <div class="section-title">Bahagian B: Pengetahuan</div>
+                <p style="margin-bottom: 20px; color: #555;"><strong>Skala:</strong> 1 = Sangat Tidak Setuju, 2 = Tidak Setuju, 3 = Neutral, 4 = Setuju, 5 = Sangat Setuju</p>
+
+                <div class="form-group">
+                    <label>1. Saya tahu maksud sebenar gotong-royong. <span class="required">*</span></label>
+                    <div class="likert-labels">
+                        <span>Sangat Tidak Setuju</span>
+                        <span style="margin-left: auto;">Sangat Setuju</span>
+                    </div>
+                    <div class="likert-options">
+                        <label><input type="radio" name="q1_knowledge" value="1" required> 1</label>
+                        <label><input type="radio" name="q1_knowledge" value="2"> 2</label>
+                        <label><input type="radio" name="q1_knowledge" value="3"> 3</label>
+                        <label><input type="radio" name="q1_knowledge" value="4"> 4</label>
+                        <label><input type="radio" name="q1_knowledge" value="5"> 5</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>2. Gotong-royong di tanah perkuburan membantu menjaga kebersihan dan imej Islam. <span class="required">*</span></label>
+                    <div class="likert-labels">
+                        <span>Sangat Tidak Setuju</span>
+                        <span style="margin-left: auto;">Sangat Setuju</span>
+                    </div>
+                    <div class="likert-options">
+                        <label><input type="radio" name="q2_knowledge" value="1" required> 1</label>
+                        <label><input type="radio" name="q2_knowledge" value="2"> 2</label>
+                        <label><input type="radio" name="q2_knowledge" value="3"> 3</label>
+                        <label><input type="radio" name="q2_knowledge" value="4"> 4</label>
+                        <label><input type="radio" name="q2_knowledge" value="5"> 5</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>3. Menjaga tanah perkuburan termasuk dalam amalan kebajikan dan tanggungjawab sosial. <span class="required">*</span></label>
+                    <div class="likert-labels">
+                        <span>Sangat Tidak Setuju</span>
+                        <span style="margin-left: auto;">Sangat Setuju</span>
+                    </div>
+                    <div class="likert-options">
+                        <label><input type="radio" name="q3_knowledge" value="1" required> 1</label>
+                        <label><input type="radio" name="q3_knowledge" value="2"> 2</label>
+                        <label><input type="radio" name="q3_knowledge" value="3"> 3</label>
+                        <label><input type="radio" name="q3_knowledge" value="4"> 4</label>
+                        <label><input type="radio" name="q3_knowledge" value="5"> 5</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>4. Saya pernah mendengar ceramah atau nasihat tentang pentingnya gotong-royong di tanah perkuburan. <span class="required">*</span></label>
+                    <div class="likert-labels">
+                        <span>Sangat Tidak Setuju</span>
+                        <span style="margin-left: auto;">Sangat Setuju</span>
+                    </div>
+                    <div class="likert-options">
+                        <label><input type="radio" name="q4_knowledge" value="1" required> 1</label>
+                        <label><input type="radio" name="q4_knowledge" value="2"> 2</label>
+                        <label><input type="radio" name="q4_knowledge" value="3"> 3</label>
+                        <label><input type="radio" name="q4_knowledge" value="4"> 4</label>
+                        <label><input type="radio" name="q4_knowledge" value="5"> 5</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bahagian C: Sikap dan Pandangan -->
+            <div class="section">
+                <div class="section-title">Bahagian C: Sikap dan Pandangan</div>
+                <p style="margin-bottom: 20px; color: #555;"><strong>Skala:</strong> 1 = Sangat Tidak Setuju, 2 = Tidak Setuju, 3 = Neutral, 4 = Setuju, 5 = Sangat Setuju</p>
+
+                <div class="form-group">
+                    <label>1. Saya berasa aktiviti gotong-royong menyeronokkan dan bermanfaat. <span class="required">*</span></label>
+                    <div class="likert-labels">
+                        <span>Sangat Tidak Setuju</span>
+                        <span style="margin-left: auto;">Sangat Setuju</span>
+                    </div>
+                    <div class="likert-options">
+                        <label><input type="radio" name="q1_attitude" value="1" required> 1</label>
+                        <label><input type="radio" name="q1_attitude" value="2"> 2</label>
+                        <label><input type="radio" name="q1_attitude" value="3"> 3</label>
+                        <label><input type="radio" name="q1_attitude" value="4"> 4</label>
+                        <label><input type="radio" name="q1_attitude" value="5"> 5</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>2. Saya berasa tidak selesa atau takut untuk menyertai aktiviti di tanah perkuburan. <span class="required">*</span></label>
+                    <div class="likert-labels">
+                        <span>Sangat Tidak Setuju</span>
+                        <span style="margin-left: auto;">Sangat Setuju</span>
+                    </div>
+                    <div class="likert-options">
+                        <label><input type="radio" name="q2_attitude" value="1" required> 1</label>
+                        <label><input type="radio" name="q2_attitude" value="2"> 2</label>
+                        <label><input type="radio" name="q2_attitude" value="3"> 3</label>
+                        <label><input type="radio" name="q2_attitude" value="4"> 4</label>
+                        <label><input type="radio" name="q2_attitude" value="5"> 5</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>3. Saya akan menyertai aktiviti gotong-royong jika diajak oleh rakan atau pensyarah. <span class="required">*</span></label>
+                    <div class="likert-labels">
+                        <span>Sangat Tidak Setuju</span>
+                        <span style="margin-left: auto;">Sangat Setuju</span>
+                    </div>
+                    <div class="likert-options">
+                        <label><input type="radio" name="q3_attitude" value="1" required> 1</label>
+                        <label><input type="radio" name="q3_attitude" value="2"> 2</label>
+                        <label><input type="radio" name="q3_attitude" value="3"> 3</label>
+                        <label><input type="radio" name="q3_attitude" value="4"> 4</label>
+                        <label><input type="radio" name="q3_attitude" value="5"> 5</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>4. Saya percaya pelajar kolej patut menjadi contoh dalam aktiviti kemasyarakatan. <span class="required">*</span></label>
+                    <div class="likert-labels">
+                        <span>Sangat Tidak Setuju</span>
+                        <span style="margin-left: auto;">Sangat Setuju</span>
+                    </div>
+                    <div class="likert-options">
+                        <label><input type="radio" name="q4_attitude" value="1" required> 1</label>
+                        <label><input type="radio" name="q4_attitude" value="2"> 2</label>
+                        <label><input type="radio" name="q4_attitude" value="3"> 3</label>
+                        <label><input type="radio" name="q4_attitude" value="4"> 4</label>
+                        <label><input type="radio" name="q4_attitude" value="5"> 5</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bahagian D: Amalan dan Cadangan -->
+            <div class="section">
+                <div class="section-title">Bahagian D: Amalan dan Cadangan</div>
+
+                <div class="form-group">
+                    <label>1. Adakah anda pernah menyertai gotong-royong di tanah perkuburan? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="participated" value="Ya, selalu" required> Ya, selalu</label>
+                        <label><input type="radio" name="participated" value="Kadang-kadang"> Kadang-kadang</label>
+                        <label><input type="radio" name="participated" value="Pernah sekali"> Pernah sekali</label>
+                        <label><input type="radio" name="participated" value="Tidak pernah"> Tidak pernah</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>2. Jika tidak pernah, mengapa?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="reason" value="Tiada peluang"> Tiada peluang</label>
+                        <label><input type="checkbox" name="reason" value="Tiada maklumat"> Tiada maklumat</label>
+                        <label><input type="checkbox" name="reason" value="Takut"> Takut</label>
+                        <label><input type="checkbox" name="reason" value="Tidak berminat"> Tidak berminat</label>
+                        <label><input type="checkbox" name="reason" value="Lain-lain"> Lain-lain</label>
+                    </div>
+                    <input type="text" name="reason_other" placeholder="Nyatakan jika lain-lain" style="margin-top: 10px;">
+                </div>
+
+                <div class="form-group">
+                    <label>3. Cadangan anda supaya lebih ramai pelajar kolej terlibat (boleh pilih lebih daripada satu): <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="suggestion" value="Diberi sijil/saguhati"> Diberi sijil/saguhati</label>
+                        <label><input type="checkbox" name="suggestion" value="Aktiviti disertai ceramah ringkas dan jamuan"> Aktiviti disertai ceramah ringkas dan jamuan</label>
+                        <label><input type="checkbox" name="suggestion" value="Diadakan pada hujung minggu/cuti semester"> Diadakan pada hujung minggu/cuti semester</label>
+                        <label><input type="checkbox" name="suggestion" value="Disertai oleh rakan sebaya"> Disertai oleh rakan sebaya</label>
+                        <label><input type="checkbox" name="suggestion" value="Lain-lain"> Lain-lain</label>
+                    </div>
+                    <input type="text" name="suggestion_other" placeholder="Nyatakan jika lain-lain" style="margin-top: 10px;">
+                </div>
+
+                <div class="form-group">
+                    <label>4. Nyatakan satu sebab utama mengapa gotong-royong di tanah perkuburan penting: <span class="required">*</span></label>
+                    <textarea name="importance" required></textarea>
+                </div>
+            </div>
+
+            <!-- Persetujuan -->
+            <div class="section">
+                <div class="form-group">
+                    <label><input type="checkbox" name="consent" required> Saya bersetuju untuk mengambil bahagian dalam kajian ini secara sukarela. Semua maklumat yang saya berikan adalah benar dan akan dirahsiakan untuk tujuan kajian sahaja. <span class="required">*</span></label>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-submit" id="submitBtn">Hantar Borang</button>
+                <button type="reset" class="btn-reset">Padam Semua</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+
+    <script>
+        // ⚠️ REPLACE WITH YOUR FIREBASE CONFIG (see setup instructions below)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const form = document.getElementById('surveyForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusMessage = document.getElementById('statusMessage');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Show loading message
+            showStatus('Menghantar data... Sila tunggu.', 'loading');
+            submitBtn.disabled = true;
+
+            try {
+                // Collect form data
+                const formData = new FormData(form);
+                const data = {};
+
+                // Add all form values
+                for (let [key, value] of formData.entries()) {
+                    if (data[key]) {
+                        if (Array.isArray(data[key])) {
+                            data[key].push(value);
+                        } else {
+                            data[key] = [data[key], value];
+                        }
+                    } else {
+                        data[key] = value;
+                    }
+                }
+
+                // Add timestamp
+                data.timestamp = new Date().toLocaleString('ms-MY');
+
+                // Save to Firebase
+                const newRef = db.ref('responses').push();
+                await newRef.set(data);
+
+                // Show success message
+                showStatus('✓ Terima kasih! Jawapan anda telah diterima dan disimpan.', 'success');
+                form.reset();
+                submitBtn.disabled = false;
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('✗ Ralat: ' + error.message, 'error');
+                submitBtn.disabled = false;
+            }
+        });
+
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
